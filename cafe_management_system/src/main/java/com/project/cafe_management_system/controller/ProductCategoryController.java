@@ -3,6 +3,7 @@ package com.project.cafe_management_system.controller;
 import com.project.cafe_management_system.dto.ProductCategoryDTO;
 import com.project.cafe_management_system.model.ProductCategory;
 import com.project.cafe_management_system.service.ProductCategoryService;
+import com.project.cafe_management_system.service.ProductService;
 import com.project.cafe_management_system.utils.ResponseGeneric;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ public class ProductCategoryController {
 
     @Autowired
     private ProductCategoryService productCategoryService;
+    @Autowired
+    private ProductService productService;
 
     @PostMapping
     public ResponseEntity<ResponseGeneric<ProductCategoryDTO>> createProductCategory(@RequestBody ProductCategoryDTO productCategoryDTO) {
