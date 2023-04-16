@@ -1,7 +1,6 @@
 package com.project.cafe_management_system.controller;
 
 import com.project.cafe_management_system.dto.ProductCategoryDTO;
-import com.project.cafe_management_system.model.ProductCategory;
 import com.project.cafe_management_system.service.ProductCategoryService;
 import com.project.cafe_management_system.service.ProductService;
 import com.project.cafe_management_system.utils.ResponseGeneric;
@@ -24,39 +23,37 @@ public class ProductCategoryController {
     @PostMapping
     public ResponseEntity<ResponseGeneric<ProductCategoryDTO>> createProductCategory(@RequestBody ProductCategoryDTO productCategoryDTO) {
 
-        productCategoryService.createProductCategory(productCategoryDTO);
-        ResponseGeneric<ProductCategoryDTO> responseGeneric = new ResponseGeneric<>(200, "success", productCategoryDTO);
-//        ResponseGeneric<ProductCategoryDTO> responseGeneric = productCategoryService.createProductCategory(productCategoryDTO);
-        return ResponseEntity.ok(responseGeneric);
+    	ResponseGeneric<ProductCategoryDTO> productCategoryDTOs = productCategoryService.createProductCategory(productCategoryDTO);
+//        ResponseGeneric<ProductCategoryDTO> responseGeneric = new ResponseGeneric<>(200, "success", productCategoryDTO);
+        return ResponseEntity.ok(productCategoryDTOs);
+        
     }
 
     @GetMapping
     public ResponseEntity<ResponseGeneric<List<ProductCategoryDTO>>> getAllProductCategory() {
-        List<ProductCategoryDTO> productCategoryDTOs = productCategoryService.getAllProductCategory();
-        ResponseGeneric<List<ProductCategoryDTO>> responseGeneric = new ResponseGeneric<>(200, "success", productCategoryDTOs);
-        return ResponseEntity.ok(responseGeneric);
+    	ResponseGeneric<List<ProductCategoryDTO>> productCategoryDTOs = productCategoryService.getAllProductCategory();
+        return ResponseEntity.ok(productCategoryDTOs);
     }
 
     @GetMapping("/id/{id}")
     public ResponseEntity<ResponseGeneric<ProductCategoryDTO>> getProductCategoryById(@PathVariable Long id) {
-        ProductCategoryDTO productCategoryDTO= productCategoryService.getProductCategoryById(id);
-        ResponseGeneric<ProductCategoryDTO>  responseGeneric = new ResponseGeneric<>(200, "success", productCategoryDTO);
-        return ResponseEntity.ok(responseGeneric);
+    	ResponseGeneric<ProductCategoryDTO> productCategoryDTO= productCategoryService.getProductCategoryById(id);
+//        ResponseGeneric<ProductCategoryDTO>  responseGeneric = new ResponseGeneric<>(200, "success", productCategoryDTO);
+        return ResponseEntity.ok(productCategoryDTO);
     }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<ResponseGeneric<List<ProductCategoryDTO>>> getProductCategoryByName(@PathVariable String name) {
-
-        List<ProductCategoryDTO> productCategoryDTO= productCategoryService.getProductCategoryByName(name);
-        ResponseGeneric<List<ProductCategoryDTO>>  responseGeneric = new ResponseGeneric<>(200, "success", productCategoryDTO);
-        return ResponseEntity.ok(responseGeneric);
-    }
+//    @GetMapping("/name/{name}")
+//    public ResponseEntity<ResponseGeneric<List<ProductCategoryDTO>>> getProductCategoryByName(@PathVariable String name) {
+//
+//    	ResponseGeneric<List<ProductCategoryDTO>> productCategoryDTOs = productCategoryService.getProductCategoryByName(name);
+//        return ResponseEntity.ok(productCategoryDTOs);
+//    }
 
     @PatchMapping("/{id}")
     public ResponseEntity<ResponseGeneric<ProductCategoryDTO>> updateProductCategory(@PathVariable Long id, @RequestBody ProductCategoryDTO productCategoryDTO) {
-        productCategoryService.updateProductCategory(id, productCategoryDTO);
-        ResponseGeneric<ProductCategoryDTO> responseGeneric = new ResponseGeneric<>(200, "success", productCategoryDTO);
-        return ResponseEntity.ok(responseGeneric);
+    	ResponseGeneric<ProductCategoryDTO> updateProductCategoryDTO = productCategoryService.updateProductCategory(id, productCategoryDTO);
+        
+        return ResponseEntity.ok(updateProductCategoryDTO);
     }
 
     @DeleteMapping("/{id}")

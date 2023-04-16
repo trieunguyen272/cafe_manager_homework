@@ -31,71 +31,75 @@ public class ProductCategoryService {
 
     @Autowired
     private ProductCategoryMapper productCategoryMapper;
-
-
-    public ResponseGeneric<Object> createProductCategory(ProductCategoryDTO productCategoryDTO) {
-        ProductCategory productCategory = new ProductCategory();
-        productCategory.setId(productCategoryDTO.getId());
-        productCategory.setProductCategoryName(productCategoryDTO.getProductCategoryName());
-        productCategoryRepository.save(productCategory);
-        Long newId = productCategory.getId();
-        productCategoryDTO.setId(newId);
-
-        return ResponseGeneric.builder().message("success")
-                .data(ProductCategoryDTO.builder()
-                        .id(productCategory.getId())
-                        .productCategoryName(productCategory.getProductCategoryName()))
-                .build();
-
-    }
-
-
-    public List<ProductCategoryDTO> getAllProductCategory() {
-        List<ProductCategory> productCategories = productCategoryRepository.findAll();
-        List<ProductCategoryDTO> productCategoryDTOs = new ArrayList<>();
-
-        for (ProductCategory productCategory : productCategories) {
-            productCategoryDTOs.add(productCategoryMapper.convertModelToDTO(productCategory));
-        }
-
-        return productCategoryDTOs;
-    }
-
-    public ProductCategoryDTO getProductCategoryById(Long id) {
+    
+    public ProductCategory retrievedById(Long id) {
         ProductCategory productCategory = productCategoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product category not exist with id: " + id));
 
-        ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO();
-
-        productCategoryDTO = productCategoryMapper.convertModelToDTO(productCategory);
-
-        return productCategoryDTO;
+        return productCategory;
     }
 
-    public List<ProductCategoryDTO> getProductCategoryByName(String name) {
-        List<ProductCategory> productCategories = productCategoryRepository.findCategoryByName(name);
 
-        if (productCategories.isEmpty()) {
-            new ResourceNotFoundException("Product category not exist with name: " + name);
-        }
+    public ResponseGeneric<ProductCategoryDTO> createProductCategory(ProductCategoryDTO productCategoryDTO) {
+        ProductCategory productCategory = productCategoryMapper.convertDTOToModel(productCategoryDTO);
+        
+        productCategory =  productCategoryRepository.save(productCategory);
+        
+        ProductCategoryDTO savedProductCategoryDTO = productCategoryMapper.convertModelToDTO(productCategory);
+//        Long newId = productCategory.getId();
+//        productCategoryDTO.setId(newId);
+        
+        return new ResponseGeneric<>(200, "success", savedProductCategoryDTO);
 
-        List<ProductCategoryDTO> productCategoryDTO = productCategories.stream().map(productCategory -> productCategoryMapper.convertModelToDTO(productCategory)).collect(Collectors.toList());
-
-        return productCategoryDTO;
-
-    }
-
-    public ResponseGeneric<Object> updateProductCategory(Long id, ProductCategoryDTO productCategoryDTO) {
-        ProductCategory productCategory = productCategoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product category not exist with id: " + id));
-        productCategory.setProductCategoryName(productCategoryDTO.getProductCategoryName());
-
-        productCategoryRepository.save(productCategory);
-        Long newId = productCategory.getId();
-        productCategoryDTO.setId(newId);
-        return ResponseGeneric.builder()
+//        return ResponseGeneric.builder().message("success")
 //                .data(ProductCategoryDTO.builder()
 //                        .id(productCategory.getId())
 //                        .productCategoryName(productCategory.getProductCategoryName()))
-                .build();
+//                .build();
+
+    }
+
+
+    public ResponseGeneric<List<ProductCategoryDTO>> getAllProductCategory() {
+        List<ProductCategory> productCategories = productCategoryRepository.findAll();
+        
+        List<ProductCategoryDTO> productCategoryDTOs = productCategories.stream()
+        		.map(productCategory -> productCategoryMapper.convertModelToDTO(productCategory))
+        		.collect(Collectors.toList());
+        return new ResponseGeneric<>(200, "Success", productCategoryDTOs);
+
+    }
+
+    public ResponseGeneric<ProductCategoryDTO> getProductCategoryById(Long id) {
+        ProductCategory productCategory = productCategoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product category not exist with id: " + id));
+
+        ProductCategoryDTO productCategoryDTO = productCategoryMapper.convertModelToDTO(productCategory);
+        return new ResponseGeneric<>(200, "Success", productCategoryDTO);
+    }
+
+//    public ResponseGeneric<List<ProductCategoryDTO>> getProductCategoryByName(String name) {
+//        List<ProductCategory> productCategories = productCategoryRepository.findCategoryByName(name);
+//        
+//        if (productCategories.isEmpty()) {
+//            throw new ResourceNotFoundException("Product category not exist with name: " + name);
+//        }
+//
+//        List<ProductCategoryDTO> productCategoryDTOs = productCategories.stream()
+//        		.map(productCategory -> productCategoryMapper.convertModelToDTO(productCategory))
+//        		.collect(Collectors.toList());
+//
+//        return new ResponseGeneric<>(200, "Success", productCategoryDTOs);
+//    }
+
+    public ResponseGeneric<ProductCategoryDTO> updateProductCategory(Long id, ProductCategoryDTO productCategoryDTO) {
+        ProductCategory productCategory = productCategoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product category not exist with id: " + id));
+        
+        productCategoryMapper.convertDTOToModel(productCategoryDTO);
+        
+        productCategory =  productCategoryRepository.save(productCategory);
+        
+        ProductCategoryDTO updatedProductCategoryDTO = productCategoryMapper.convertModelToDTO(productCategory);
+        
+        return new ResponseGeneric<>(200, "success", updatedProductCategoryDTO);
     }
 
     public ResponseGeneric<Map<String, Boolean>> deleteProductCategory(Long id) {

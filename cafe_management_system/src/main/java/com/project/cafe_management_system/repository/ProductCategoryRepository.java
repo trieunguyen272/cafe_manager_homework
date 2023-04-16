@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface ProductCategoryRepository extends JpaRepository<ProductCategory, Long> {
 
-    @Query("SELECT s FROM ProductCategory s WHERE s.productCategoryName like %?1%")
-    List<ProductCategory> findCategoryByName(String name);
+//    @Query("SELECT s FROM ProductCategories s WHERE s.productCategoryName like %?1%")
+//    List<ProductCategory> findCategoryByName(String name);
 
 }

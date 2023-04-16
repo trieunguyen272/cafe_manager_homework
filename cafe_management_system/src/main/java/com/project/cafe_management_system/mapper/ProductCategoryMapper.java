@@ -30,4 +30,14 @@ public class ProductCategoryMapper {
 
         return productCategoryDTO;
     }
+    
+    public ProductCategory convertDTOToModel(ProductCategoryDTO productCategoryDTO) {
+        ProductCategory productCategory = new ProductCategory();
+
+        productCategory.setId(productCategoryDTO.getId());
+        productCategory.setProductCategoryName(productCategoryDTO.getProductCategoryName());
+
+
+        return productCategory;
+    }
 }

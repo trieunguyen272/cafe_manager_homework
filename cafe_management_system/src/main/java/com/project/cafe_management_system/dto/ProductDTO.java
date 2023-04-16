@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 public class ProductDTO {
     private Long id;
     private String productName;
+    private Long productCategoryId;
     private float price;
     private int quantity;
     private String image;
     private String description;
-    private Long productCategoryId;
 
 }
